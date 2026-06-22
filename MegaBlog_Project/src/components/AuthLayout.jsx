@@ -13,8 +13,9 @@ function Protected({ children, authentication = true }) {
     } else if (!authentication && authStatus !== authentication) {
       navigate("/");
     }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoader(false);
-  }, [authStatus, authentication, navigate]);
+}, [authStatus, authentication, navigate]);
 
   return loader ? <h1 >Loading...</h1> : <>{children}</>;
 }
