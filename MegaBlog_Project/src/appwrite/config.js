@@ -14,7 +14,7 @@ export class Service {
     this.bucket = new Storage(this.client);
   }
 
-  async createPost({ title, slug, content, featuredImage, statue, userId }) {
+  async createPost({ title, slug, content, featuredImage, status, userId }) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
@@ -24,16 +24,17 @@ export class Service {
           title,
           content,
           featuredImage,
-          statue,
+          status,
           userId,
         },
       );
     } catch (error) {
       console.error("Error creating post:", error);
+      throw error;
     }
   }
 
-  async updatePost(slug, { title, content, featuredImage, statue }) {
+  async updatePost(slug, { title, content, featuredImage, status }) {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
@@ -43,11 +44,12 @@ export class Service {
           title,
           content,
           featuredImage,
-          statue,
+          status,
         },
       );
     } catch (error) {
       console.error("Error updating post:", error);
+      throw error;
     }
   }
 
@@ -60,10 +62,11 @@ export class Service {
       );
     } catch (error) {
       console.error("Error deleting post:", error);
+      throw error;
     }
   }
 
-  async getPost(queries = [Query.equal("statue", "active")]) {
+  async getPost(queries = [Query.equal("status", "active")]) {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -72,6 +75,7 @@ export class Service {
       );
     } catch (error) {
       console.error("Error getting post:", error);
+      throw error;
     }
   }
 
@@ -86,6 +90,7 @@ export class Service {
       );
     } catch (error) {
       console.error("Error uploading file:", error);
+      throw error;
     }
   }
 
@@ -94,6 +99,7 @@ export class Service {
       return await this.bucket.deleteFile(conf.appwriteBucketId, fileId);
     } catch (error) {
       console.error("Error deleting file:", error);
+      throw error;
     }
   }
   getFilePreview(fileId) {

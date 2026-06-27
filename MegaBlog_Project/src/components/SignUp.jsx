@@ -13,6 +13,7 @@ function SignUp() {
   const [error, setError] = useState("");
 
   const create = async (data) => {
+    setError("");
     try {
       const userData = await authService.createAccount(data);
       if (userData) {
@@ -47,7 +48,7 @@ function SignUp() {
                 </p>
                 {error && <p className="text-center text-red-500 mt-8">{error}</p>}
                 <form onSubmit={handleSubmit(create)}>
-                   <div div className="space-y-5">
+                   <div className="space-y-5">
                    <Input label="Full Name" type="text" placeholder="Enter your full name" {...register("name", { required: true })} />
                    <Input label="Email" type="email" placeholder="Enter your email" {...register("email", { required: true })} />
                    <Input label="Password" type="password" {...register("password", { required: true })} />

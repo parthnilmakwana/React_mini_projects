@@ -14,15 +14,15 @@ const dispatch = useDispatch()
 
 useEffect(() => {
   authservice.getCurrentUser()
-  .then((userDate) => {
-    if(userDate){
-dispatch(login(userDate))
+  .then((userData) => {
+    if(userData){
+dispatch(login(userData))
     }else{
 dispatch(logout())
     }
   })
   .finally(()=>{setLoading(false)})
-},[])
+},[dispatch])
   
 
   return !loading ? (
@@ -30,7 +30,7 @@ dispatch(logout())
       <div className='w-full block'>
         <Header />
         <main>
-          {/* outlet:   <Outlet /> */}
+          <Outlet />
         </main>
         <Footer />
       </div>
