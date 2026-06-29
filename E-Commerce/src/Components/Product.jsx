@@ -13,8 +13,16 @@ function Product() {
         const response = await fetch('https://api.escuelajs.co/api/v1/products');
         const data = await response.json();
         
-        // Filtering by category name
-        const clothes = data.filter((item) => item.category.name === 'Clothes');
+        // Filtering by category name (handles both 'Clothes' and 'Clothe')
+        let clothes = data.filter((item) => 
+          item.category.name === 'Clothes' || 
+          item.category.name === 'Clothe'
+        );
+        
+        // Fallback: if the sandbox API doesn't have any clothes category, show any available products
+        if (clothes.length === 0) {
+          clothes = data;
+        }
         
         // Let's just grab the first 12 for a nice grid
         setProducts(clothes.slice(0, 12));

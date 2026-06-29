@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useCart } from '../Context/CartContext';
 
 function ProductDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,12 +14,26 @@ function ProductDetails() {
     (async () => {
       try {
         setLoading(true);
+        setError(null);
         const response = await fetch(`https://api.escuelajs.co/api/v1/products/${id}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch product details');
+        if (response.ok) {
+          const data = await response.json();
+          setProduct(data);
+        } else {
+          // Fallback: If single product fetch fails (due to API database integrity bugs in the public sandbox),
+          // fetch all products and search for the matching ID in the list.
+          console.warn(`Single product fetch failed for ID ${id}, trying fallback list search...`);
+          const listResponse = await fetch('https://api.escuelajs.co/api/v1/products');
+          if (!listResponse.ok) {
+            throw new Error('Failed to fetch product details');
+          }
+          const listData = await listResponse.json();
+          const matchedProduct = listData.find(item => item.id === Number(id));
+          if (!matchedProduct) {
+            throw new Error('Product not found in database');
+          }
+          setProduct(matchedProduct);
         }
-        const data = await response.json();
-        setProduct(data);
       } catch (err) {
         console.error("Error fetching product details:", err);
         setError(err.message);
@@ -113,7 +129,10 @@ function ProductDetails() {
 
             {/* Actions */}
             <div className="space-y-4">
-              <button className="w-full bg-black text-white py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 duration-200">
+              <button 
+                onClick={() => addToCart(product)}
+                className="w-full bg-black text-white py-4 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 duration-200"
+              >
                 Add to Cart
               </button>
               
