@@ -9,6 +9,7 @@ import Womens from './Pages/Womens.jsx'
 import Kids from './Pages/Kids.jsx'
 import Login from './Pages/Login.jsx'
 import Cart from './Pages/Cart.jsx'
+import ProductDetails from './Pages/ProductDetails.jsx'
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path:"product/:id",
+        element:<ProductDetails />  
       },
       {
         path: "mens",

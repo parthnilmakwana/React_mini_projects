@@ -1,11 +1,11 @@
-import React from 'react'
+import Product from "../Components/product";
 
 function Kids() {
   return (
-    <div>
-      <h1>Kids' Clothing</h1>
-    </div>
-  )
+    <>
+      <Product />
+    </>
+  );
 }
 
-export default Kids
+export default Kids;
